@@ -20,8 +20,15 @@ mkdirSync("/output", { recursive: true });
 writeFileSync("/output/entry.txt", LINE, "utf8");
 
 // Self-check: the file must hold exactly the chosen line, 1-160 chars,
-// nothing else. A failed check fails the run instead of shipping a bad entry.
+// one line, no leading/trailing whitespace, nothing else. A failed check
+// fails the run instead of shipping a bad entry.
 const written = readFileSync("/output/entry.txt", "utf8");
-if (written !== LINE || LINE.length < 1 || LINE.length > 160) {
+if (
+  written !== LINE ||
+  LINE.length < 1 ||
+  LINE.length > 160 ||
+  LINE.includes("\n") ||
+  LINE.trim() !== LINE
+) {
   throw new Error("entry.txt does not hold exactly the chosen line");
 }
